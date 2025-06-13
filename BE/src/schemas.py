@@ -29,7 +29,7 @@ class AgentBase(BaseModel):
     max_output_token: int
 
 class AgentCreate(AgentBase):
-    mcp_servers: List[MCPServerCreate]
+    mcp_servers: List[MCPServerCreate] | None = None
 
 class Agent(AgentBase):
     id: int

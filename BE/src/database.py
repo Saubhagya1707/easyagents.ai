@@ -16,6 +16,9 @@ engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     pool_pre_ping=True,  # Enable connection health checks
     pool_recycle=3600,   # Recycle connections after 1 hour
+    # Add these options for automatic schema updates
+    echo=True,  # Log SQL statements
+    future=True  # Use SQLAlchemy 2.0 style
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -27,4 +30,9 @@ def get_db():
     try:
         yield db
     finally:
-        db.close() 
+        db.close()
+
+def init_db():
+    """Initialize the database, creating all tables."""
+    from . import models  # Import models here to avoid circular imports
+    Base.metadata.create_all(bind=engine) 

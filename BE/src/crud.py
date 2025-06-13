@@ -24,15 +24,16 @@ def create_agent(db: Session, agent: schemas.AgentCreate):
     db.refresh(db_agent)
     
     # Create MCP servers
-    for mcp_server in agent.mcp_servers:
-        db_mcp_server = models.MCPServer(
-            name=mcp_server.name,
-            command=mcp_server.command,
-            args=mcp_server.args,
-            envs=mcp_server.envs,
-            agent_id=db_agent.id
-        )
-        db.add(db_mcp_server)
+    if agent.mcp_servers:
+        for mcp_server in agent.mcp_servers:
+            db_mcp_server = models.MCPServer(
+                name=mcp_server.name,
+                command=mcp_server.command,
+                args=mcp_server.args,
+                envs=mcp_server.envs,
+                agent_id=db_agent.id
+            )
+            db.add(db_mcp_server)
     
     db.commit()
     db.refresh(db_agent)
